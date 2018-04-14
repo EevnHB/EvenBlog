@@ -26,7 +26,7 @@ SECRET_KEY = 'd^-(hc6stai)2tvrtqwdiht4di-8zi4)n_cg^&1bmrq8f5d4sx'
 DEBUG = False
 
 #设置默认地址
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.evenblog.site']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '47.98.164.46']
 
 
 # Application definition
