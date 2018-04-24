@@ -24,6 +24,9 @@ def category(request, pk):
 
 def detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    #每次点击使之+1
+    post.increase_views()
+
     post.body = markdown.markdown(post.body, extensions=[
         'markdown.extensions.extra',
         'markdown.extensions.codehilite',
