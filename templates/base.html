@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Black &amp; White</title>
+    <title>Even 编程学习笔记</title>
 
     <!-- meta -->
     <meta charset="UTF-8">
@@ -28,10 +28,13 @@
 <div class="container">
     <header id="site-header">
         <div class="row">
+
             <div class="col-md-4 col-sm-5 col-xs-8">
-                <div class="logo">
-                    <h1><a href="{% url 'blog:index' %}"><b>Black</b> &amp; White</a></h1>
-                </div>
+                    <a href="{% url 'blog:index' %}" class="text-primary">
+                        <img src="{% static 'images/log.jpg' %}" class="img-rounded col-md-3 col-sm-3 col-xs-3 visible-md-*">
+                        <h1>Even</h1>
+                    </a>
+
             </div><!-- col-md-4 -->
             <div class="col-md-8 col-sm-7 col-xs-4">
                 <nav class="main-nav" role="navigation">
@@ -63,8 +66,7 @@
         </div>
     </header>
 </div>
-<div class="copyrights">Collect from <a href="http://www.cssmoban.com/">网页模板</a></div>
-<div class="copyrights">Modified by <a href="http://zmrenwu.com/">追梦人物的博客</a></div>
+<div class="copyrights">@ <a href="{% url 'blog:index' %}">Even的编程学习笔记</a></div>
 
 <div class="content-body">
     <div class="container">
@@ -142,9 +144,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <p class="copyright">&copy 2017 - 采集自<a href="http://www.cssmoban.com/"
+                <p class="copyright">&copy 2018 - 采集自<a href="http://www.cssmoban.com/"
                                                         target="_blank" title="模板之家">模板之家</a>
-                    - 由<a href="http://zmrenwu.com/" title="网页模板" target="_blank">追梦人物的博客</a>修改
+                    - 由<a href="{% url 'blog:index' %}" title="网页模板" target="_blank">Even的编程学习笔记</a>修改
                 </p>
             </div>
         </div>
