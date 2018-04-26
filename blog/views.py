@@ -1,45 +1,54 @@
 import markdown#markdown模块可以把文字转化成html格式输出到网页上
 from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView
 from comments.forms import commentForm
 from .models import Post, Category
 
 # Create your views here.
-def index(request):
-    post_list = Post.objects.all()
-    return render(request, 'blog/index.html', context={
-        'post_list': post_list
-    })
+class IndexView(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    context_object_name = 'post_list'
 
-def archives(request, year, month):
-    post_list = Post.objects.filter(created_time__year=year,
-                                    created_time__month=month
-                                    )
-    return render(request, 'blog/index.html', context={'post_list': post_list})
+class ArchivesView(IndexView):
+    def get_requeryset(self):
+        year = self.kwargs.year
+        month = self.kwargs.month
+        return super(ArchivesView, self).get_queryset().filter(created_time__year=year,
+                                                               created_time__month=month)
 
-def category(request, pk):
-    cate = get_object_or_404(Category, pk=pk)
-    post_list = Post.objects.filter(category=cate)
-    return render(request, 'blog/index.html', context={'post_list': post_list})
+class CategoryView(IndexView):
+    def get_requeryset(self):
+        cate = get_object_or_404(Category, pk=self.kwargs.get('pk'))
+        return super(CategoryView, self).get_requeryset().filter(category=cate)
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/detail.html'
+    context_object_name = 'post'
+
+    def get(self, request, *args, **kwargs):
+        response = super(PostDetailView, self).get(request, *args, **kwargs)
+        self.object.increase_views()
+        return response
+
+    def get_object(self, queryset=None):
+        post = super(PostDetailView, self).get_object(queryset=None)
+        post.body = markdown.markdown(post.body, extensions=[
+            'markdown.extensions.extra',
+            'markdown.extensions.codehilite',
+            'markdown.extensions.toc',
+        ])
+        return post
+
+    def get_context_data(self, **kwargs):
+        context = super(PostDetailView, self).get_context_data(**kwargs)
+        form = commentForm()
+        comment_list = self.object.comment_set.all()
+        context.update({
+            'form': form,
+            'comment_list': comment_list
+        })
+        return context
 
 
-def detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    #每次点击使之+1
-    post.increase_views()
-
-    post.body = markdown.markdown(post.body, extensions=[
-        'markdown.extensions.extra',
-        'markdown.extensions.codehilite',
-        'markdown.extensions.toc',
-    ])
-
-    form = commentForm
-    # 获取这篇 post 下的全部评论
-    comment_list = post.comment_set.all()
-    # 将文章、表单、以及文章下的评论列表作为模板变量传给 detail.html 模板，以便渲染相应数据。
-    context = {
-        'post': post,
-        'form': form,
-        'comment_list': comment_list
-    }
-    return render(request, 'blog/detail.html', context=context)
