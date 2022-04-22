@@ -12,7 +12,7 @@ Markdown==2.6.11
 openpyxl==2.5.0
 Pillow==5.0.0
 Pygments==2.2.0
-PyPDF2==1.26.0
+PyPDF2==1.27.5
 pyperclip==1.6.0
 pypng==0.0.18
 PyQRCode==1.2.1
